@@ -1,4 +1,8 @@
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = Cypress.env("STATIC_SERVER_URL");
+
+if (!BASE_URL) {
+  throw new Error("You had to specify STATIC_SERVER_URL before running tests");
+}
 
 describe("Shared UI Testing", () => {
   describe("Init page", () => {
@@ -15,24 +19,22 @@ describe("Shared UI Testing", () => {
         cy.get(".navbar-brand.mr-auto").should("have.text", "Test UI");
       });
 
-      it("should navigate to /# when logo clicked", () => {
+      it("should navigate to / when logo clicked", () => {
         cy.get(".navbar-brand.mr-auto").click();
 
-        cy.url().should("eq", `${BASE_URL}/#`);
+        cy.url().should("eq", BASE_URL);
       });
     });
 
     context("User list", () => {
       it("should be rendered with proper items", () => {
         cy
-          .get(".col-md-3.mb-3.mb-md-0")
-          .find("> div")
+          .get(".col-md-3.mb-3.mb-md-0 .list-group")
           .children("div.list-group-item")
           .contains("Users");
 
         cy
-          .get(".col-md-3.mb-3.mb-md-0")
-          .find("> div")
+          .get(".col-md-3.mb-3.mb-md-0 .list-group")
           .children()
           .should("have.length", 11);
       });
@@ -67,7 +69,7 @@ describe("Shared UI Testing", () => {
         cy.get(".col-md-3.mb-3.mb-md-0 a:first").click();
         cy.get(".tab-pane.fade a:first").click();
 
-        cy.url().should("eq", `${BASE_URL}/#/posts/1`);
+        cy.url().should("eq", `${BASE_URL}/posts/1`);
       });
     });
   });
@@ -81,7 +83,7 @@ describe("Shared UI Testing", () => {
         "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
     };
     beforeEach(() => {
-      cy.visit(`${BASE_URL}/#/posts/1`);
+      cy.visit(`${BASE_URL}/posts/1`);
     });
 
     context("Post editor", () => {
@@ -174,7 +176,7 @@ describe("Shared UI Testing", () => {
         it("should navigate to init route when delete button clicked", () => {
           cy.get(".card a").click();
 
-          cy.url().should("eq", `${BASE_URL}/#/`);
+          cy.url().should("eq", `${BASE_URL}/`);
         });
 
         it("should remove post lfrom post list", () => {
