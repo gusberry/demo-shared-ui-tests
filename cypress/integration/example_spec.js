@@ -22,7 +22,7 @@ describe("Shared UI Testing", () => {
       it("should navigate to / when logo clicked", () => {
         cy.get(".navbar-brand.mr-auto").click();
 
-        cy.url().should("eq", BASE_URL);
+        cy.url().should("match", new RegExp(`${BASE_URL}/?`));
       });
     });
 
