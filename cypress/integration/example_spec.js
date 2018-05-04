@@ -134,12 +134,12 @@ describe("Shared UI Testing", () => {
           cy.get(".card-body > p").type(TEST_TEXT);
         });
 
-        it("should rollback post text when edit button is clicked in edit mode", () => {
+        it.only("should rollback post text when edit button is clicked in edit mode", () => {
           const TEST_TEXT = "TEST_TEXT_!";
           cy.get("button.btn-sm").click();
           cy.get(".card-body > p").type(TEST_TEXT);
           cy.get("button.btn-sm").click();
-          cy.get(".card-body > p").contains(post.body);
+          cy.get(".card-body > p").should("not.contain", TEST_TEXT);
         });
 
         it("should update post text when save button is clicked in edit mode", () => {
